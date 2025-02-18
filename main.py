@@ -30,7 +30,7 @@ def longest_run(mylist, key):
             if ind > max:
                 max = ind
         else:
-            run = 0
+            ind = 0
     return max
 
     pass
