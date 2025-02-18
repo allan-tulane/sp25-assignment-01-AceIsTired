@@ -4,12 +4,35 @@ See assignment-01.pdf for details.
 """
 # no imports needed.
 
+'''\begin{array}{l}
+\mathit{foo}~x =   \\
+~~~~\texttt{if}{}~~x \le 1~~\texttt{then}{}\\
+~~~~~~~~x\\
+~~~~\texttt{else}\\
+~~~~~~~~\texttt{let}{}~~(ra, rb) = (\mathit{foo}~(x-1))~~,~~(\mathit{foo}~(x-2))~~\texttt{in}{}\\
+~~~~~~~~~~~~ra + rb\\
+~~~~~~~~\texttt{end}{}.\\
+\end{array}'''
 def foo(x):
-    ### TODO
+    if x <= 1:
+        return x
+    else:
+        return foo(x - 1) + foo(x - 2)
     pass
 
 def longest_run(mylist, key):
-    ### TODO
+    max = 0
+    ind = 0
+
+    for i in range(len(mylist)):
+        if mylist[i] == key:
+            ind += 1 
+            if ind > max:
+                max = ind
+        else:
+            run = 0
+        return max
+
     pass
 
 
@@ -37,7 +60,28 @@ def to_value(v):
         return int(v)
         
 def longest_run_recursive(mylist, key):
-    ### TODO
+    
+    # Base Cases
+    if len(mylist) == 1:
+        if mylist[0] == key:
+            return Result(1, 1, 1, True) # Return proper Result dependinf on case
+        else:
+            return Result(0, 0, 0, False)
+    
+    mid = len(mylist) // 2
+    left = longest_run_recursive(mylist[:mid], key)
+    right = longest_run_recursive(mylist[mid:], key)
+
+    lcount = left.right_size if mylist[mid - 1] == key else 0
+    rcount = right.left_size if mylist[mid] == key else 0
+    cross_run = lcount + rcount if lcount and rcount else 0
+
+    longest_size = max(left.longest_size, right.longest_size, cross_run)
+    left_size = left.left_size + right.left_size if left.is_entire_range else left.left_size
+    right_size = right.right_size + left.right_size if right.is_entire_range else right.right_size
+
+    return Result(left_size, right_size, longest_size, left.is_entire_range and right.is_entire_range)
+
     pass
 
 
